@@ -32,7 +32,16 @@ export class CountryService {
     }
     return country;
   }
-
+  async existCountryByAlpha3Code(alpha3Code: string): Promise<boolean> {
+    const country: CountryEntity | null = await this.countryRepository.findOne({
+      where: { alpha3Code },
+      relations: ['travelPlans'],
+    });
+    if (!country) {
+      return false
+    }
+    return true;
+  }
   async create(country: CountryEntity): Promise<CountryEntity> {
     return await this.countryRepository.save(country);
   }

@@ -14,7 +14,7 @@ export class CountryEntity {
   region!: string;
 
   @Column()
-  population!: string;
+  population!: number;
 
   @Column()
   flag!: string;
