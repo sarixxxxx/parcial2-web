@@ -38,7 +38,7 @@ export class CountryService {
       relations: ['travelPlans'],
     });
     if (!country) {
-      return false
+      return false;
     }
     return true;
   }

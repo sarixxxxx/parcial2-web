@@ -8,14 +8,13 @@ import {
   BusinessLogicException,
 } from 'src/shared/errors/business-errors';
 import { CountryService } from 'src/country/country.service';
-import { CountryEntity } from 'src/country/country.entity/country.entity';
 
 @Injectable()
 export class TravelPlanService {
   constructor(
     @InjectRepository(TravelPlanEntity)
     private readonly travelPlanRepository: Repository<TravelPlanEntity>,
-    private readonly countryService: CountryService
+    private readonly countryService: CountryService,
   ) {}
 
   async findAll(): Promise<TravelPlanEntity[]> {
@@ -37,9 +36,10 @@ export class TravelPlanService {
     return travelPlan;
   }
   async create(travelPlan: TravelPlanEntity): Promise<TravelPlanEntity> {
-    const countryTravelPlan : CountryEntity = travelPlan.country;
-    const existsCountry: boolean= await this.countryService.existCountryByAlpha3Code(countryTravelPlan.alpha3Code);
-    if (!existsCountry){
+    const existsCountry: boolean =
+      await this.countryService.existCountryByAlpha3Code(travelPlan.alpha3Code);
+
+    if (!existsCountry) {
       throw new BusinessLogicException(
         'Country not found for the new Travel Plan',
         BusinessError.PRECONDITION_FAILED,
@@ -48,11 +48,12 @@ export class TravelPlanService {
     return await this.travelPlanRepository.save(travelPlan);
   }
 
-  async delete(travelPlanId: string): Promise<void>{
-    const travelPlan: TravelPlanEntity | null = await this.travelPlanRepository.findOne({
-      where: {id:travelPlanId},
-    });
-    if (!travelPlan){
+  async delete(travelPlanId: string): Promise<void> {
+    const travelPlan: TravelPlanEntity | null =
+      await this.travelPlanRepository.findOne({
+        where: { id: travelPlanId },
+      });
+    if (!travelPlan) {
       throw new BusinessLogicException(
         'The travel plan with the given id was not found',
         BusinessError.NOT_FOUND,

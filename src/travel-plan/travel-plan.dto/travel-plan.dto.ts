@@ -1,10 +1,6 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class TravelPlanDto {
-  @IsString()
-  @IsNotEmpty()
-  readonly id!: string;
-
   @IsString()
   @IsNotEmpty()
   readonly travelTitle!: string;
@@ -16,4 +12,9 @@ export class TravelPlanDto {
   @IsDate()
   @IsNotEmpty()
   readonly endDate!: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(3, 3)
+  readonly alpha3Code!: string;
 }

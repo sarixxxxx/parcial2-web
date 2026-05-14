@@ -21,6 +21,9 @@ export class TravelPlanEntity {
   @Column()
   endDate!: Date;
 
+  @Column({ length: 3 })
+  alpha3Code!: string;
+
   @ManyToOne(() => CountryEntity, (country) => country.travelPlans)
   @JoinColumn({ name: 'alpha3Code' })
   country!: CountryEntity;
