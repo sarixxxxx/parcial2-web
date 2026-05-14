@@ -10,18 +10,18 @@ import {
 @Entity()
 export class TravelPlanEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  travelTitle: string;
+  travelTitle!: string;
 
   @Column()
-  startDate: Date;
+  startDate!: Date;
 
   @Column()
-  endDate: Date;
+  endDate!: Date;
 
   @ManyToOne(() => CountryEntity, (country) => country.travelPlans)
   @JoinColumn({ name: 'alpha3Code' })
-  country: CountryEntity;
+  country!: CountryEntity;
 }

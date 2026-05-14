@@ -5,20 +5,20 @@ import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 @Entity()
 export class CountryEntity {
   @PrimaryColumn({ length: 3 })
-  alpha3Code: string;
+  alpha3Code!: string;
 
   @Column()
-  countryName: string;
+  countryName!: string;
 
   @Column()
-  region: string;
+  region!: string;
 
   @Column()
-  population: string;
+  population!: string;
 
   @Column()
-  flag: string;
+  flag!: string;
 
   @OneToMany(() => TravelPlanEntity, (travelPlan) => travelPlan.country)
-  travelPlans: TravelPlanEntity[];
+  travelPlans!: TravelPlanEntity[];
 }

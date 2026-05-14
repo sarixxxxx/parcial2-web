@@ -6,6 +6,7 @@ import { TravelPlanModule } from './travel-plan/travel-plan.module';
 import { CountryEntity } from './country/country.entity/country.entity';
 import { TravelPlanEntity } from './travel-plan/travel-plan.entity/travel-plan.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TravelPlanCountryModule } from './travel-plan-country/travel-plan-country.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       dropSchema: true,
       synchronize: true,
     }),
+    TravelPlanCountryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
