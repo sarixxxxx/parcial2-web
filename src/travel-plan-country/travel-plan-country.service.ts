@@ -78,4 +78,86 @@ export class TravelPlanCountryService {
     }
     return countryTravelPlans;
   }
+
+  async findTravelPlansByCountry(
+    alpha3Code: string,
+  ): Promise<TravelPlanEntity[]> {
+    const country: CountryEntity | null = await this.countryRepository.findOne({
+      where: { alpha3Code },
+      relations: ['travelPlans'],
+    });
+    if (!country) {
+      throw new BusinessLogicException(
+        'Country not found',
+        BusinessError.NOT_FOUND,
+      );
+    }
+    return country.travelPlans;
+  }
+
+  async asociateTravelPlanCountry(
+    alpha3Code: string,
+    travelPlans: TravelPlanEntity[],
+  ): Promise<CountryEntity> {
+    const country: CountryEntity | null = await this.countryRepository.findOne({
+      where: { alpha3Code },
+      relations: ['travelPlans'],
+    });
+    if (!country) {
+      throw new BusinessLogicException(
+        'Country not found',
+        BusinessError.NOT_FOUND,
+      );
+    }
+    for (const tp of travelPlans) {
+      const travelPlan: TravelPlanEntity | null =
+        await this.travelPlanRepository.findOne({
+          where: { id: tp.id },
+        });
+      if (!travelPlan) {
+        throw new BusinessLogicException(
+          'Travel Plan not found',
+          BusinessError.NOT_FOUND,
+        );
+      }
+    }
+    country.travelPlans = travelPlans;
+    return await this.countryRepository.save(country);
+  }
+  async deleteTravelPlanCountry(
+    alpha3Code: string,
+    travelPlanId: string,
+  ): Promise<void> {
+    const travelPlan: TravelPlanEntity | null =
+      await this.travelPlanRepository.findOne({ where: { id: travelPlanId } });
+    if (!travelPlan) {
+      throw new BusinessLogicException(
+        'Travel Plan not found',
+        BusinessError.NOT_FOUND,
+      );
+    }
+
+    const country: CountryEntity | null = await this.countryRepository.findOne({
+      where: { alpha3Code },
+      relations: ['travelPlans'],
+    });
+    if (!country) {
+      throw new BusinessLogicException(
+        'Country not found',
+        BusinessError.NOT_FOUND,
+      );
+    }
+    const countryTravelPlans: TravelPlanEntity | undefined =
+      country.travelPlans.find((e) => e.id === travelPlan.id);
+    if (!countryTravelPlans) {
+      throw new BusinessLogicException(
+        'The travelPlan with the given id is not associated to the country',
+        BusinessError.PRECONDITION_FAILED,
+      );
+    }
+    country.travelPlans = country.travelPlans.filter(
+      (e) => e.id !== travelPlanId,
+    );
+    await this.countryRepository.save(country);
+  }
 }
