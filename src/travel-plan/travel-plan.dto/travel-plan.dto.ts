@@ -20,4 +20,8 @@ export class TravelPlanDto {
   @IsNotEmpty()
   @Length(3, 3)
   readonly alpha3Code!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly userId!: string;
 }

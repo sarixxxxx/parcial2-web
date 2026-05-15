@@ -7,6 +7,11 @@ import { CountryEntity } from './country/country.entity/country.entity';
 import { TravelPlanEntity } from './travel-plan/travel-plan.entity/travel-plan.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TravelPlanCountryModule } from './travel-plan-country/travel-plan-country.module';
+import { ExpenseModule } from './expense/expense.module';
+import { TravelPlanExpenseModule } from './travel-plan-expense/travel-plan-expense.module';
+import { ExpenseEntity } from './expense/expense.entity/expense.entity';
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/user.entity/user.entity';
 
 @Module({
   imports: [
@@ -18,12 +23,15 @@ import { TravelPlanCountryModule } from './travel-plan-country/travel-plan-count
       port: 5432,
       username: 'postgres',
       password: 'sara',
-      database: 'travel_plans_db',
-      entities: [CountryEntity, TravelPlanEntity],
+      database: 'travel_plans_db2',
+      entities: [CountryEntity, TravelPlanEntity, ExpenseEntity, UserEntity],
       dropSchema: true,
       synchronize: true,
     }),
     TravelPlanCountryModule,
+    ExpenseModule,
+    TravelPlanExpenseModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,6 +8,7 @@ import {
   BusinessLogicException,
 } from 'src/shared/errors/business-errors';
 import { CountryService } from 'src/country/country.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TravelPlanService {
@@ -15,6 +16,7 @@ export class TravelPlanService {
     @InjectRepository(TravelPlanEntity)
     private readonly travelPlanRepository: Repository<TravelPlanEntity>,
     private readonly countryService: CountryService,
+    private readonly userService: UserService,
   ) {}
 
   async findAll(): Promise<TravelPlanEntity[]> {
@@ -25,7 +27,7 @@ export class TravelPlanService {
     const travelPlan: TravelPlanEntity | null =
       await this.travelPlanRepository.findOne({
         where: { id },
-        relations: ['country'],
+        relations: ['country', 'user'],
       });
     if (!travelPlan) {
       throw new BusinessLogicException(
@@ -36,6 +38,14 @@ export class TravelPlanService {
     return travelPlan;
   }
   async create(travelPlan: TravelPlanEntity): Promise<TravelPlanEntity> {
+    try {
+      await this.userService.findOne(travelPlan.id);
+    } catch {
+      throw new BusinessLogicException(
+        'User not found for the new Travel Plan',
+        BusinessError.PRECONDITION_FAILED,
+      );
+    }
     const existsCountry: boolean =
       await this.countryService.existCountryByAlpha3Code(travelPlan.alpha3Code);
 

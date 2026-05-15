@@ -28,7 +28,8 @@ export class CountryService {
     });
     if (!country) {
       try {
-        const fetchedCountry = await this.restCountriesProvider.fetchByAlpha3Code(alpha3Code);
+        const fetchedCountry =
+          await this.restCountriesProvider.fetchByAlpha3Code(alpha3Code);
         return await this.create(fetchedCountry);
       } catch {
         throw new BusinessLogicException(
@@ -41,11 +42,12 @@ export class CountryService {
   }
   async existCountryByAlpha3Code(alpha3Code: string): Promise<boolean> {
     const country: CountryEntity | null = await this.countryRepository.findOne({
-      where: { alpha3Code }
+      where: { alpha3Code },
     });
     if (!country) {
       try {
-        const fetchedCountry = await this.restCountriesProvider.fetchByAlpha3Code(alpha3Code);
+        const fetchedCountry =
+          await this.restCountriesProvider.fetchByAlpha3Code(alpha3Code);
         await this.create(fetchedCountry);
         return true;
       } catch {
