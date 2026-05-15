@@ -26,7 +26,7 @@ import { AccessLogMiddleware } from './shared/middleware/access-log.middleware';
       password: 'sara',
       database: 'travel_plans_db2',
       entities: [CountryEntity, TravelPlanEntity, ExpenseEntity, UserEntity],
-      dropSchema: true,
+      dropSchema: false,
       synchronize: true,
     }),
     TravelPlanCountryModule,

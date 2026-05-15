@@ -36,5 +36,6 @@ export class TravelPlanEntity {
   expenses!: ExpenseEntity[];
 
   @OneToOne(() => UserEntity, (user) => user.travelPlan)
+  @JoinColumn()
   user!: UserEntity;
 }

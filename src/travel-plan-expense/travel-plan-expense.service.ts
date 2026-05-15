@@ -23,7 +23,10 @@ export class TravelPlanExpenseService {
     expense: ExpenseEntity,
   ): Promise<TravelPlanEntity> {
     const travelPlan: TravelPlanEntity | null =
-      await this.travelPlanRepository.findOne({ where: { id: travelPlanId } });
+      await this.travelPlanRepository.findOne({
+        where: { id: travelPlanId },
+        relations: ['expenses'],
+      });
     if (!travelPlan) {
       throw new BusinessLogicException(
         'The travelPlan with the given id does not exist',
@@ -31,8 +34,8 @@ export class TravelPlanExpenseService {
       );
     }
 
-    travelPlan.expenses = [...travelPlan.expenses, expense];
-    return await this.expenseRepository.save(travelPlan);
+    travelPlan.expenses = [...(travelPlan.expenses ?? []), expense];
+    return await this.travelPlanRepository.save(travelPlan);
   }
 
   async createExpense(expense: ExpenseEntity, travelPlanId: string) {
@@ -47,6 +50,5 @@ export class TravelPlanExpenseService {
       );
     }
     await this.addExpenseTravelPlan(travelPlanId, expense);
-    return await this.expenseRepository.save(expense);
   }
 }
