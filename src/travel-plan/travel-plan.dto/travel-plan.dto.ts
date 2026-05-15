@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class TravelPlanDto {
@@ -5,10 +6,12 @@ export class TravelPlanDto {
   @IsNotEmpty()
   readonly travelTitle!: string;
 
+  @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
   readonly startDate!: Date;
 
+  @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
   readonly endDate!: Date;

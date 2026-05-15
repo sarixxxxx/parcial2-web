@@ -14,6 +14,9 @@ export class CountryEntity {
   region!: string;
 
   @Column()
+  capital!: string;
+
+  @Column()
   population!: number;
 
   @Column()

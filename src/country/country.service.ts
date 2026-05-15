@@ -7,12 +7,14 @@ import {
   BusinessError,
   BusinessLogicException,
 } from 'src/shared/errors/business-errors';
+import { RestCountriesProvider } from './restcountries.provider';
 
 @Injectable()
 export class CountryService {
   constructor(
     @InjectRepository(CountryEntity)
     private readonly countryRepository: Repository<CountryEntity>,
+    private readonly restCountriesProvider: RestCountriesProvider,
   ) {}
 
   async findAll(): Promise<CountryEntity[]> {
@@ -25,20 +27,30 @@ export class CountryService {
       relations: ['travelPlans'],
     });
     if (!country) {
-      throw new BusinessLogicException(
-        'Country not found',
-        BusinessError.NOT_FOUND,
-      );
+      try {
+        const fetchedCountry = await this.restCountriesProvider.fetchByAlpha3Code(alpha3Code);
+        return await this.create(fetchedCountry);
+      } catch {
+        throw new BusinessLogicException(
+          'Country not found',
+          BusinessError.NOT_FOUND,
+        );
+      }
     }
     return country;
   }
   async existCountryByAlpha3Code(alpha3Code: string): Promise<boolean> {
     const country: CountryEntity | null = await this.countryRepository.findOne({
-      where: { alpha3Code },
-      relations: ['travelPlans'],
+      where: { alpha3Code }
     });
     if (!country) {
-      return false;
+      try {
+        const fetchedCountry = await this.restCountriesProvider.fetchByAlpha3Code(alpha3Code);
+        await this.create(fetchedCountry);
+        return true;
+      } catch {
+        return false;
+      }
     }
     return true;
   }

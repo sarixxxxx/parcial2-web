@@ -14,6 +14,10 @@ export class CountryDto {
   @IsNotEmpty()
   readonly region!: string;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly capital!: string;
+
   @IsNumber()
   @IsNotEmpty()
   readonly population!: number;
