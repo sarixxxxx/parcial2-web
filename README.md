@@ -116,3 +116,6 @@ DELETE http://localhost:3000/api/v1/travel-plan/72114714-f06e-43b6-b6a9-1c3f4ef1
 ```
 
 Respuesta exitosa: HTTP 204 (sin contenido)
+
+
+Para la inserción individual de gastos asociados a un plan de viaje, se utilizó una relación OneToMany entre TravelPlanEntity y ExpenseEntity gestionada por TypeORM. Al agregar un gasto, se carga el plan de viaje existente junto con sus gastos actuales mediante relations: ['expenses'], se concatena el nuevo gasto al arreglo en memoria con el operador spread ([...expenses, newExpense]), y finalmente se persiste el objeto completo con travelPlanRepository.save(travelPlan). TypeORM se encarga de insertar el nuevo registro en la tabla expense_entity y mantener la integridad referencial automáticamente.
