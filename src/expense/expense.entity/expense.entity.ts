@@ -1,11 +1,5 @@
 import { TravelPlanEntity } from 'src/travel-plan/travel-plan.entity/travel-plan.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ExpenseEntity {
@@ -22,6 +16,5 @@ export class ExpenseEntity {
   category!: string;
 
   @ManyToOne(() => TravelPlanEntity, (travelPlan) => travelPlan.expenses)
-  @JoinColumn({ name: 'id' })
   travelPlan!: TravelPlanEntity;
 }

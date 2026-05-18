@@ -30,7 +30,10 @@ export class TravelPlanController {
       TravelPlanEntity,
       travelPlanDto,
     );
-    return await this.travelPlanService.create(travelPlan);
+    return await this.travelPlanService.create(
+      travelPlan,
+      travelPlanDto.userId,
+    );
   }
 
   @Delete(':travelPlanId')

@@ -34,16 +34,21 @@ export class TravelPlanExpenseService {
       );
     }
 
-    travelPlan.expenses = [...(travelPlan.expenses ?? []), expense];
-    return await this.travelPlanRepository.save(travelPlan);
+    expense.travelPlan = travelPlan;
+    await this.expenseRepository.save(expense);
+
+    return (await this.travelPlanRepository.findOne({
+      where: { id: travelPlanId },
+      relations: ['expenses'],
+    })) as TravelPlanEntity;
   }
 
   async createExpense(expense: ExpenseEntity, travelPlanId: string) {
-    try {
+    const travelPlan: TravelPlanEntity | null =
       await this.travelPlanRepository.findOne({
         where: { id: travelPlanId },
       });
-    } catch {
+    if (!travelPlan) {
       throw new BusinessLogicException(
         'Travel plan not found',
         BusinessError.NOT_FOUND,
